@@ -20,7 +20,5 @@ public class Main {
         DataManager dataManager = new DataManager(config);
         dataManager.loadData();
         dataManager.detectCycles();
-
-
     }
 }

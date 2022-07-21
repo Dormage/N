@@ -6,4 +6,9 @@ public class NftNode {
     public NftNode(String address) {
         this.address = address;
     }
+
+    @Override
+    public String toString() {
+        return address +" ";
+    }
 }

@@ -1,12 +1,16 @@
 import data.NftNode;
 import data.NftTransfer;
 import org.jgrapht.Graph;
+import org.jgrapht.alg.cycle.CycleDetector;
 import org.jgrapht.alg.cycle.HawickJamesSimpleCycles;
 import org.jgrapht.graph.DirectedWeightedMultigraph;
+import org.jgrapht.graph.DirectedWeightedPseudograph;
+
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class DataManager {
     private Config config;
@@ -20,12 +24,12 @@ public class DataManager {
         this.database = new Database(config);
         edgeList = new ArrayList<>();
         nodeList = new HashMap<>();
-        nftGraph = new DirectedWeightedMultigraph<>(NftTransfer.class);
+        nftGraph = new DirectedWeightedPseudograph<>(NftTransfer.class);
     }
 
     public void loadData(){
         loadEdges();
-        loadVertices();
+        //loadVertices();
         buildNftGraph();
         System.out.println(Constants.SUCCESS + " Loading data complete. "  +  " Memory used: " +(Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024102 + "MB");
     }
@@ -70,17 +74,27 @@ public class DataManager {
         }
     }
     public void buildNftGraph(){
-        nodeList.values().forEach(nftNode -> nftGraph.addVertex(nftNode));
-        edgeList.stream().filter(nftTransfer -> {
-            return nodeList.values().contains(nftTransfer.to);
-        }).forEach(nftTransfer -> nftGraph.addEdge(
-                nodeList.get(nftTransfer.from),
-                nodeList.get(nftTransfer.to),
-                nftTransfer
-                ));
+        //nodeList.values().forEach(nftNode -> nftGraph.addVertex(nftNode));
+        edgeList.stream().forEach(edge ->{
+            if(edge.from != edge.to) {
+                if (!nftGraph.vertexSet().contains(edge.from)) {
+                    NftNode node = new NftNode(edge.from);
+                    nftGraph.addVertex(node);
+                    nodeList.put(node.address, node);
+                }
+                if (!nftGraph.vertexSet().contains(edge.to)) {
+                    NftNode node = new NftNode(edge.to);
+                    nftGraph.addVertex(node);
+                    nodeList.put(node.address, node);
+                }
+                nftGraph.addEdge(nodeList.get(edge.from), nodeList.get(edge.to), edge);
+            }
+        });
         System.out.println(Constants.SUCCESS + " Graph successfully built!");
     }
     public void detectCycles(){
-        System.out.println(Constants.WARN+ "Detected " + new HawickJamesSimpleCycles(this.nftGraph).findSimpleCycles().size() +" Cycles");
+        System.out.println(Constants.WARN+ "Graph has Cycles: " + new CycleDetector<>(this.nftGraph).detectCycles() +"");
+        List cycles = new HawickJamesSimpleCycles(this.nftGraph).findSimpleCycles();
+        System.out.println(Constants.WARN+ "Detected " + cycles.size() +" Cycles");
     }
 }

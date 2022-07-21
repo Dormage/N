@@ -22,4 +22,13 @@ public class NftTransfer {
         this.tokenId = tokenId;
         this.transactionHash = transactionHash;
     }
+
+    @Override
+    public String toString() {
+        return "NftTransfer{" +
+                "amount=" + amount +
+                ", from='" + from + '\'' +
+                ", to='" + to + '\'' +
+                '}';
+    }
 }
