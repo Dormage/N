@@ -16,4 +16,4 @@ log/
 target/
 
 # Config
-config.json
+../EthereumETL/config.json

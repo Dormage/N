@@ -4,4 +4,6 @@ public class Config {
     public String databaseAddress;
     public Integer databasePort;
     public String databaseName;
+    public String transactionFile;
+    public int rowsPerBatch;
 }
