@@ -4,6 +4,6 @@
   "databaseAddress": "88.200.63.133",
   "databasePort": 8104,
   "databaseName": "nft",
-  "transactionFile" : "out.csv",
+  "transactionFile" : "small_small_out.csv",
   "rowsPerBatch" : 100
 }

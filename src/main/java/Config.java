@@ -6,4 +6,5 @@ public class Config {
     public String databaseName;
     public String transactionFile;
     public int rowsPerBatch;
+
 }
