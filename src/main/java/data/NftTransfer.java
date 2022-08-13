@@ -2,7 +2,7 @@ package data;
 
 import java.sql.Timestamp;
 
-public class NftTransfer extends Trx{
+public class NftTransfer extends Trx implements Comparable<NftTransfer>{
     public int id;
     public double amount;
     public String collection_address;
@@ -44,5 +44,14 @@ public class NftTransfer extends Trx{
     }
 
 
-
+    @Override
+    public int compareTo(NftTransfer nftTransfer) {
+        if(this.block == nftTransfer.block){
+            return 0;
+        }else if(this.block < nftTransfer.block){
+            return -1;
+        }else {
+            return 1;
+        }
+    }
 }

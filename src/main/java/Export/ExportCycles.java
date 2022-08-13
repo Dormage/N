@@ -44,10 +44,24 @@ public class ExportCycles {
         this.fileName = fileName;
     }
 
-    public void exportRoutine(){
+    public void exportNFTRoutine(){
         setFile("graph");
         setLinkId();
         addNftTransferHeader();
+        printGraph();
+        dumpBatch();
+        closeWriter();
+        setFile("cycles");
+        addCycleHeader();
+        printCycles();
+        dumpBatch();
+        closeWriter();
+    }
+
+    public void exportETHRoutine(){
+        setFile("graph");
+        setLinkId();
+        addTransactionHeader();
         printGraph();
         dumpBatch();
         closeWriter();
